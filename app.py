@@ -1,10 +1,12 @@
 import re
-from flask import Flask,request,redirect,render_template
+from flask import Flask,request,redirect,render_template,session
 app=Flask(__name__,
     static_folder="image",
     static_url_path="/i"
 
 ) #__name__代表目前執行的模組
+
+app.secret_key="password"   #密鑰
 
 @app.route("/re")
 def red():
@@ -16,9 +18,10 @@ def index():
     
     return render_template("index.html")
 
-@app.route("/getSum")
+@app.route("/getSum",methods=["POST"])
 def getsum():
-    data=request.args.get("data",100)
+    data=request.form["data"]
+    session["number"]=data
     result=1
     for i in range(1,int(data)+1):
         result*=i
@@ -28,7 +31,7 @@ def getsum():
 def second():
     return render_template("second.html")
 
-@app.route("/third")
+@app.route("/third",methods=["GET"])
 def third():
     return render_template("Third.html")
 
